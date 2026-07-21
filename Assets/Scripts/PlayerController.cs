@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && isOnGround && !GameManager.gameOver)
+        if (ctx.performed && isOnGround)// && !GameManager.gameOver)
         {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "Ground" && !GameManager.gameOver)
+        if (collision.gameObject.name == "Ground")// && !GameManager.gameOver)
         {
             isOnGround = true;
             dirtParticle.Play();
