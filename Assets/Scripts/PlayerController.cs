@@ -1,3 +1,4 @@
+using System.Runtime.Serialization.Formatters;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,8 @@ public class PlayerController : MonoBehaviour
     private AudioSource playerAudio;
     private Rigidbody playerRb;
     private bool isOnGround;
+    private bool gameStarted;
+    private float animationSpeed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,11 +22,34 @@ public class PlayerController : MonoBehaviour
         playerAudio = GetComponent<AudioSource>();
         isOnGround = true;
         Physics.gravity *= gravityModifier;
+        animationSpeed = playerAnimator.GetFloat("Speed_f");
+        playerAnimator.SetFloat("Speed_f", 0);
+    }
+
+    void Update()
+    {
+        if(!GameManager.Instance.gameOver && !gameStarted)
+        {
+            StartGame();
+        }
+        else if(GameManager.Instance.gameOver)
+        {
+            playerAnimator.SetFloat("Speed_f", 0);
+            dirtParticle.Stop();
+        }
+    }
+
+    private void StartGame()
+    {
+        gameStarted = true;
+        playerAnimator.SetFloat("Speed_f", animationSpeed);
+        isOnGround = true;
+        dirtParticle.Play();
     }
 
     public void OnJump(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && isOnGround)// && !GameManager.gameOver)
+        if (ctx.performed && isOnGround && !GameManager.Instance.gameOver)
         {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
@@ -35,7 +61,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "Ground")// && !GameManager.gameOver)
+        if (collision.gameObject.name == "Ground" && !GameManager.Instance.gameOver)
         {
             isOnGround = true;
             dirtParticle.Play();
@@ -43,11 +69,11 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Obstacle"))
         {
+            playerAnimator.SetBool("Death_b", true);
             dirtParticle.Stop();
             explosionParticle.Play();
-            playerAnimator.SetBool("Death_b", true);
             playerAudio.PlayOneShot(crashSound, 1.0f);
-            GameManager.gameOver = true;
+            UIManager.Instance.GameOver();
         }
 
     }
@@ -56,7 +82,8 @@ public class PlayerController : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Scoreable"))
         {
-            GameManager.ChangeScore(5);
+            Debug.Log("Received a Score");
+            UIManager.Instance.UpdateScore(5);
         }
     }
 }

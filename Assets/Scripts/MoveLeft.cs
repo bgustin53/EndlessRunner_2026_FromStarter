@@ -14,7 +14,7 @@ public class MoveLeft : MonoBehaviour
 
     private void MoveToTheLeft()
     {
-        if(!GameManager.gameOver)
+        if(!GameManager.Instance.gameOver)
         {
             transform.Translate(Vector3.left * Time.deltaTime * speed);
         }
