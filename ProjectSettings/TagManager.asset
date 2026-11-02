@@ -8,6 +8,8 @@ TagManager:
   - Scoreable
   - Collectible
   - Powerup
+  - Ground
+  - Background
   layers:
   - Default
   - TransparentFX

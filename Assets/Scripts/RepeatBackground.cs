@@ -12,7 +12,7 @@ public class RepeatBackground : MonoBehaviour
         repeatWidth = GetComponent<BoxCollider>().size.x / 2;
     }
 
-    // Update is called once per frame
+    // Move the forward sprint to the position of the backward sprite
     void Update()
     {
         if(transform.position.x < startPos.x - repeatWidth)

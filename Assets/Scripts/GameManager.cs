@@ -3,7 +3,10 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    public bool gameOver;
+    public int speed;
+    public bool startGame {get; set;}
+    public bool gameOver {get; set;}
+
 
     void Awake()
     {
@@ -15,6 +18,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        gameOver = true;
     }
 }
 

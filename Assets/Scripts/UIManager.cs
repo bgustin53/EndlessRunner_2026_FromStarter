@@ -77,6 +77,7 @@ public class UIManager : MonoBehaviour
         _timerRadio.style.visibility = Visibility.Hidden;
         _startButton.style.visibility = Visibility.Hidden;
         GameManager.Instance.gameOver = false;
+        GameManager.Instance.startGame = true;
     }
 
     // Example helper methods to update display text during gameplay

@@ -1,4 +1,3 @@
-using System.Runtime.Serialization.Formatters;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,7 +10,6 @@ public class PlayerController : MonoBehaviour
     private AudioSource playerAudio;
     private Rigidbody playerRb;
     private bool isOnGround;
-    private bool gameStarted;
     private float animationSpeed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -28,20 +26,21 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if(!GameManager.Instance.gameOver && !gameStarted)
-        {
-            StartGame();
-        }
-        else if(GameManager.Instance.gameOver)
+        if(GameManager.Instance.gameOver)
         {
             playerAnimator.SetFloat("Speed_f", 0);
             dirtParticle.Stop();
+        }
+
+        if (GameManager.Instance.startGame)
+        {
+            StartGame();
         }
     }
 
     private void StartGame()
     {
-        gameStarted = true;
+        GameManager.Instance.startGame = false;
         playerAnimator.SetFloat("Speed_f", animationSpeed);
         isOnGround = true;
         dirtParticle.Play();
@@ -49,6 +48,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext ctx)
     {
+        Debug.Log($"Is On Ground {isOnGround}");
         if (ctx.performed && isOnGround && !GameManager.Instance.gameOver)
         {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
