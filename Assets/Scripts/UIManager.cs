@@ -49,7 +49,6 @@ public class UIManager : MonoBehaviour
        // Hid the countdown time before starting 
        _timeLabel.style.visibility = Visibility.Hidden;
 
-    Debug.Log("HERE");
        // Register button click listener
        if (_startButton != null)
        {
